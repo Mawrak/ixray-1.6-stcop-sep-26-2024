@@ -520,6 +520,8 @@ struct {
 	}
 } imgui_search_manager;
 
+constexpr float kGeneralAlphaLevelForImGuiWindows = 0.4f;
+
 void InitSections();
 void InitImGuiCLSIDInGame();
 void InitImGuiSearchInGame();
