@@ -8,6 +8,7 @@
 
 #include "ai_space.h"
 #include "ImUtils.h"
+#include "../../xrEngine/xr_input.h"
 
 using Section = xr_vector<std::pair<std::string_view, CInifile::Sect*>>;
 struct SectionData
@@ -821,7 +822,18 @@ void SpawnManager_HandleButtonPress(CInifile::Sect* section)
 
 	xr_string cmd = "g_spawn_inv ";
 	bool isInvItem = section->line_exist("cost") && section->line_exist("inv_weight");
-	if (imgui_spawn_manager.spawn_on_level || !isInvItem)
+	
+
+	bool spawn_on_level = imgui_spawn_manager.spawn_on_level;
+	if (pInput)
+	{
+		if (pInput->iGetAsyncKeyState(SDL_SCANCODE_LCTRL))
+		{
+			spawn_on_level = !imgui_spawn_manager.spawn_on_level;
+		}
+	}
+	
+	if (spawn_on_level || !isInvItem)
 	{
 		cmd = "g_spawn ";
 	}
