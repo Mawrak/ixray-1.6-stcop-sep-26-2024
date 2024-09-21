@@ -1958,7 +1958,7 @@ public:
 
 		for (const auto& section : pSettings->sections())
 		{
-			if (section->line_exist("class") && section->line_exist("visual") && isValidSection(section->Name.c_str()))
+			if (section->line_exist("class"))
 			{
 				tips.push_back(section->Name.c_str());
 			}
