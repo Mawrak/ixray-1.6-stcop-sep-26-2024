@@ -210,7 +210,7 @@ void RenderWeaponManagerWindow()
 				imgui_weapon_manager.inv_grid_y = pItem->GetInvGridRect().y1;
 				imgui_weapon_manager.inv_grid_width = pItem->GetInvGridRect().x2;
 				imgui_weapon_manager.inv_grid_height = pItem->GetInvGridRect().y2;
-				
+
 				if (Render)
 				{
 					imgui_weapon_manager.ui_icons = Render->getSurface("ui\\ui_icon_equipment");
@@ -1059,6 +1059,7 @@ void RenderWeaponManagerWindow()
 		}
 		};
 
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.4f));
 	if (ImGui::Begin("Weapon Manager", &Engine.External.EditorStates[static_cast<u8>(EditorUI::Game_WeaponManager)]))
 	{
 		if (ImGui::BeginTabBar("##TB_InGameWeaponManager"))
@@ -1112,4 +1113,5 @@ void RenderWeaponManagerWindow()
 
 		ImGui::End();
 	}
+	ImGui::PopStyleColor(1);
 }
