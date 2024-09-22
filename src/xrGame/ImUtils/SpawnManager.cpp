@@ -47,7 +47,7 @@ struct
 	Section Others{};
 
 	std::unique_ptr<CScriptSound> sound_tip;
-	string_path sound_tip_path;
+	string_path sound_tip_path{};
 } imgui_spawn_manager;
 
 
