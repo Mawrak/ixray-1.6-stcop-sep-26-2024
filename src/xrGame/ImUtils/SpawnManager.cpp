@@ -67,6 +67,11 @@ bool SpawnManager_RenderButtonOrImage(CInifile::Sect* section, const char* imnam
 void SpawnManager_HandleButtonPress(CInifile::Sect* section);
 void SpawnManager_ProcessSections(Section& sections, size_t& number_imgui);
 
+void DestroySpawnManagerWindow()
+{
+	imgui_spawn_manager.sound_tip.reset();
+}
+
 void InitSections()
 {
 	if (g_pClsidManager == nullptr)

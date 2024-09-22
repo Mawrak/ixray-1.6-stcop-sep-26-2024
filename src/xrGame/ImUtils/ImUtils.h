@@ -531,5 +531,7 @@ void RenderSpawnManagerWindow();
 void RenderWeaponManagerWindow();
 void RenderSearchManagerWindow();
 
+void DestroySpawnManagerWindow();
+
 void RegisterImGuiInGame();
 void execute_console_command_deferred(CConsole* c, LPCSTR string_to_execute);
