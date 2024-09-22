@@ -9,6 +9,10 @@
 #include "ai_space.h"
 #include "ImUtils.h"
 #include "../../xrEngine/xr_input.h"
+#include "Actor.h"
+#include "game_news.h"
+#include "script_sound.h"
+#include "../../xrCore/xr_ini.h"
 
 using Section = xr_vector<std::pair<std::string_view, CInifile::Sect*>>;
 struct SectionData
@@ -27,7 +31,7 @@ struct
 	bool weapon_sort_by_min_hit_power{};
 	bool weapon_sort_by_min_fire_distance{};
 	bool spawn_on_level{};
-	bool render_as_table{true};
+	bool render_as_table{ true };
 	char spawn_count[4]{};
 	// weapon tab
 
@@ -41,6 +45,9 @@ struct
 
 	Section Vehicles{};
 	Section Others{};
+
+	std::unique_ptr<CScriptSound> sound_tip;
+	string_path sound_tip_path;
 } imgui_spawn_manager;
 
 
@@ -66,6 +73,25 @@ void InitSections()
 	{
 		R_ASSERT(!"! clsid manager uninitialized!");
 		return;
+	}
+
+	string_path	file_path;
+	FS.update_path(file_path, "$game_config$", "misc\\script_sound.ltx");
+	CInifile ini(file_path);
+
+	if (ini.line_exist("pda_tips", "path") == 1)
+	{
+		memset(file_path, 0, sizeof(file_path));
+		const char* pSoundRelativeName = ini.r_string("pda_tips", "path");
+
+		char with_format_name[128]{};
+		sprintf_s(with_format_name, sizeof(with_format_name), "%s.ogg", pSoundRelativeName);
+
+
+		if (FS.exist("$game_sounds$", with_format_name))
+		{
+			memcpy_s(imgui_spawn_manager.sound_tip_path, sizeof(imgui_spawn_manager.sound_tip_path), pSoundRelativeName, strlen(pSoundRelativeName));
+		}
 	}
 
 	//xr_set<xr_string> classes = {};
@@ -219,6 +245,12 @@ void RenderSpawnManagerWindow() {
 
 	if (g_pClsidManager == nullptr)
 		return;
+
+	if (imgui_spawn_manager.sound_tip.get() == nullptr)
+	{
+		imgui_spawn_manager.sound_tip = std::make_unique<CScriptSound>(imgui_spawn_manager.sound_tip_path);
+		imgui_spawn_manager.sound_tip->SetVolume(0.8f);
+	}
 
 	auto maxSortCost = [](Section& collection)
 		{
@@ -878,6 +910,27 @@ void SpawnManager_HandleButtonPress(CInifile::Sect* section)
 	int count = atoi(imgui_spawn_manager.spawn_count);
 	if (count == 0)
 		count = 1;
+
+
+
+	if (Actor())
+	{
+		if (imgui_spawn_manager.sound_tip.get())
+		{
+			imgui_spawn_manager.sound_tip->PlayAtPos(Actor()->lua_game_object(), Fvector().set(0.0f, 0.0f, 0.0f), 0.0f, sm_2D);
+		}
+
+		char text_news[64]{};
+		sprintf_s(text_news, sizeof(text_news), "[%s] x [%d]", section->Name.c_str(), count);
+		GAME_NEWS_DATA				news_data;
+		news_data.m_type = GAME_NEWS_DATA::eNewsType::eNews;
+		news_data.news_caption = g_pStringTable->translate("general_in_item");
+		news_data.news_text = text_news;
+		news_data.show_time = 3000;
+		news_data.texture_name = "ui_inGame2_Predmet_poluchen";
+		Actor()->AddGameNews(news_data);
+	}
+
 
 	xr_string cmd = "g_spawn_inv ";
 	bool isInvItem = section->line_exist("cost") && section->line_exist("inv_weight");
