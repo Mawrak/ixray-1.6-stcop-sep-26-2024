@@ -887,7 +887,7 @@ void SpawnManager_ProcessSections(Section& sections, size_t& number_imgui)
 
 bool SpawnManager_RenderButtonOrImage(CInifile::Sect* section, const char* imname)
 {
-	static const auto surfaceParams = ::Render->getSurface("ui\\ui_icon_equipment");
+	const auto surfaceParams = ::Render->getSurface("ui\\ui_icon_equipment");
 
 	bool isIcon = section->line_exist("inv_grid_x")
 		&& section->line_exist("inv_grid_y")
