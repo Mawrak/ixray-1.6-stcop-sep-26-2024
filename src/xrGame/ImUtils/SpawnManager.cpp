@@ -27,7 +27,7 @@ struct
 	bool weapon_sort_by_min_hit_power{};
 	bool weapon_sort_by_min_fire_distance{};
 	bool spawn_on_level{};
-	bool render_as_table{};
+	bool render_as_table{true};
 	char spawn_count[4]{};
 	// weapon tab
 
@@ -796,7 +796,7 @@ void SpawnManager_ProcessSections(Section& sections, size_t& number_imgui)
 		);
 		size_t size_of_sections = sections.size();
 
-		if (ImGui::BeginTable("##SpawnManagerRenderAsTable", kSpawnManagerTableViewColumnSize, ImGuiTableFlags_Borders))
+		if (ImGui::BeginTable("##SpawnManagerRenderAsTable", kSpawnManagerTableViewColumnSize, ImGuiTableFlags_Borders | ImGuiTableFlags_SizingStretchProp))
 		{
 			for (size_t row = 0; row < row_max; ++row)
 			{
