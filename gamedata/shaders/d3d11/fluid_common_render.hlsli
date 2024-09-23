@@ -11,6 +11,8 @@
 //	Value for skybox depth
 #define Z_MAX 100000
 
+#pragma warning(disable : 4000)
+
 //--------------------------------------------------------------------------------------
 // Textures
 //--------------------------------------------------------------------------------------
@@ -306,7 +308,7 @@ float4 Raycast(PS_INPUT_RAYCAST input)
     // Sample twice per voxel
     float fSamples = (rayLength / gridScaleFactor * maxGridDim) * 2.0;
     int nSamples = floor(fSamples);
-    float3 stepVec = normalize((rayOrigin - eyeOnGrid) * gridDim) * recGridDim * 0.5;
+    float3 stepVec = normalize((rayOrigin - eyeOnGrid.xyz) * gridDim.xyz) * recGridDim.xyz * 0.5;
 
     float3 O = rayOrigin + stepVec * Offset;
 
@@ -339,3 +341,4 @@ float4 Raycast(PS_INPUT_RAYCAST input)
 
     return color;
 }
+

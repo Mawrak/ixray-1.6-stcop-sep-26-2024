@@ -1,6 +1,4 @@
 #include "common.hlsli"
-
-#include "lmodel.hlsli"
 #include "shadow.hlsli"
 
 #include "metalic_roughness_light.hlsli"
@@ -14,7 +12,7 @@ float4 main(p_volume I, float4 pos2d : SV_POSITION) : SV_Target
     float2 tcProj = I.tc.xy / I.tc.w;
 	
     IXrayGbuffer O;
-    GbufferUnpack(tcProj, pos2d, O);
+    GbufferUnpack(tcProj, pos2d.xy, O);
 
     float4 Point = float4(Ldynamic_hud > 0 ? O.PointHud.xyz : O.Point.xyz, 1.0f);
 

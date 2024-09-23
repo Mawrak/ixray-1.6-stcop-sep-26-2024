@@ -24,13 +24,12 @@ float4 main(v2p I) : SV_Target
     //	Igor: additional depth test
 #ifdef USE_SOFT_PARTICLES
     float2 tcProj = I.tctexgen.xy / I.tctexgen.w;
-    gbuffer_data gbd = gbuffer_load_data(tcProj, I.hpos);
-
-    float4 _P = float4(gbd.P, gbd.mtl);
-    float spaceDepth = _P.z - I.tctexgen.z;
-
-    result.a *= Contrast(saturate(spaceDepth * 1.3f), 2.0f);
-    result.rgb *= Contrast(saturate(spaceDepth * 1.3f), 2.0f);
+	
+    IXrayGbuffer O;
+    GbufferUnpack(tcProj, I.hpos.xy, O);
+	
+    float spaceDepth = O.PointReal.z - I.tctexgen.z;
+    result *= Contrast(saturate(spaceDepth * 1.3f), 2.0f);
 #endif //	USE_SOFT_PARTICLES
 
     clip(result.a - (0.01f / 255.0f));
@@ -40,3 +39,4 @@ float4 main(v2p I) : SV_Target
 
     return result;
 }
+

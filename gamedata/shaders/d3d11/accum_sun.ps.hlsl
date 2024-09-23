@@ -1,5 +1,4 @@
 #include "common.hlsli"
-#include "lmodel.hlsli"
 
 #if SUN_QUALITY > 2
     #define USE_ULTRA_SHADOWS
@@ -20,7 +19,7 @@ float4 main(v2p_volume I) : SV_Target
 
     if (O.SSS > 0.5f)
     {
-        Shift *= dot(Ldynamic_dir, Shift) >= 0.0 ? -1.0f : 1.0f;
+        Shift *= dot(Ldynamic_dir.xyz, Shift) >= 0.0 ? -1.0f : 1.0f;
     }
 
     float4 Point = float4(O.Point.xyz, 1.f);

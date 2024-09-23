@@ -1,5 +1,4 @@
 #include "common.hlsli"
-#include "lmodel.hlsli"
 
 // Pixel
 // Note: this is a float-sphere

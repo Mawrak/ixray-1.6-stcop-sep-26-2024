@@ -15,11 +15,11 @@ static const float fParallaxStopFade = 12.0f;
 void UpdateTC(inout p_bumped_new I)
 {
 	float3x3 TBN = float3x3(I.M1, I.M2, I.M3);
-	float3 viewDir = mul(transpose(TBN), -I.position);   // better
+	float3 viewDir = mul(transpose(TBN), -I.position.xyz);   // better
 	
 	viewDir = normalize(viewDir);
 	
-	float2 currTexCoord = I.tcdh;
+	float2 currTexCoord = I.tcdh.xy;
 	float height = s_bumpX.Sample(smp_base, currTexCoord).w;
 	I.tcdh.xy += viewDir.xy * PARALLAX_HEIGHT * (height - 0.5f);
 	
@@ -80,7 +80,7 @@ void UpdateTC(inout p_bumped_new I)
 void UpdateTC(inout p_bumped_new I)
 {
     float3x3 TBN = float3x3(I.M1, I.M2, I.M3);
-    float3 viewDir = mul(transpose(TBN), -I.position);
+    float3 viewDir = mul(transpose(TBN), -I.position.xyz);
     viewDir = normalize(viewDir);
 
     float height = s_bumpX.Sample(smp_base, I.tcdh.xy).w - 0.5f;

@@ -223,14 +223,9 @@ float get_sun(float4 lmh)
     return lmh.y;
 }
 
-float3 v_hemi(float3 n)
+float3 v_sun(float3 N)
 {
-    return L_hemi_color * L_hemi_color * (.5f + .5f * n.y);
-}
-
-float3 v_sun(float3 n)
-{
-    return L_sun_color * dot(n, -L_sun_dir_w);
+    return L_sun_color.xyz * dot(N, -L_sun_dir_w.xyz);
 }
 
 float3 calc_reflection(float3 pos_w, float3 norm_w)

@@ -1,6 +1,5 @@
 #include "common.hlsli"
 #include "reflections.hlsli"
-#include "hmodel.hlsli"
 
 struct PSInput
 {
@@ -24,7 +23,7 @@ float3 SpecularPhong(float3 Point, float3 Normal, float3 Light)
 float4 main(PSInput I) : SV_Target
 {
 	float4 base = s_base.Sample(smp_base, I.world_position.xz);
-	float3 normal = s_nmap.Sample(smp_base, I.world_position.xz) * 2.0 - 1.0;
+	float3 normal = s_nmap.Sample(smp_base, I.world_position.xz).xyz * 2.0 - 1.0;
 
 	//Build cotangent frame and transform our normal to world space
 	float3x3 TBN = {float3(0.0, 0.0, 0.0), float3(0.0, 0.0, 0.0), float3(0.0, 1.0, 0.0)};
@@ -33,8 +32,8 @@ float4 main(PSInput I) : SV_Target
 
     float3 Nw = normalize(mul(TBN, normal));
 
-	float3 envd0 = env_s0.Sample(smp_rtlinear, Nw);
-	float3 envd1 = env_s1.Sample(smp_rtlinear, Nw);
+	float3 envd0 = env_s0.Sample(smp_rtlinear, Nw).xyz;
+	float3 envd1 = env_s1.Sample(smp_rtlinear, Nw).xyz;
 	
 	float3 envd = lerp(envd0, envd1, L_ambient.w) * L_hemi_color.xyz;
 	base.xyz *= envd * envd; //Ambient
@@ -45,7 +44,7 @@ float4 main(PSInput I) : SV_Target
 	float fresnel = saturate(dot(vreflect, v2point));
 
 #ifdef USE_SSLR_ON_WATER
-	float4 sslr = calc_reflections(I.world_position, I.hpos, vreflect);
+	float4 sslr = calc_reflections(I.world_position.xyz, I.hpos.xy, vreflect);
 #endif
 
 	float2 rotation = 0.0f;
@@ -59,8 +58,8 @@ float4 main(PSInput I) : SV_Target
 	vreflect /= vreflectmax;
 	vreflect.y = vreflect.y * 2.0f - 1.0f;
 
-	float3 env0 = s_env0.Sample(smp_rtlinear, vreflect);
-	float3 env1 = s_env1.Sample(smp_rtlinear, vreflect);
+	float3 env0 = s_env0.Sample(smp_rtlinear, vreflect).xyz;
+	float3 env1 = s_env1.Sample(smp_rtlinear, vreflect).xyz;
 	
 	float3 env = lerp(env0, env1, L_ambient.w) * L_sky_color.xyz;
 
@@ -78,7 +77,7 @@ float4 main(PSInput I) : SV_Target
 	
 	// Igor: additional depth test
 #ifdef USE_SOFT_WATER
-	gbuffer_data gbd = gbuffer_load_data(I.hpos.xy * pos_decompression_params2.zw, I.hpos);
+	gbuffer_data gbd = gbuffer_load_data(I.hpos.xy * pos_decompression_params2.zw, I.hpos.xy);
 
 	float waterDepth = length(mul(m_V, float4(I.world_position, 1.0)).xyz - gbd.P) * 0.75f;
 

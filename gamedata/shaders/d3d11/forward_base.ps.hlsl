@@ -1,7 +1,5 @@
 #include "common.hlsli"
 #include "sload.hlsli"
-#include "lmodel.hlsli"
-#include "hmodel.hlsli"
 
 #include "metalic_roughness_light.hlsli"
 #include "metalic_roughness_ambient.hlsli"
@@ -56,7 +54,7 @@ void main(p_bumped_new I, out f_forward O)
 	float3 View = M.Point.xyz * rcp(ViewLength);
 	
     float3 Light = M.Sun * DirectLight(LightColor, L_sun_dir_e.xyz, M.Normal, View, M.Color.xyz, M.Metalness, M.Roughness);
-    float3 Ambient = AmbientLighting(View, M.Normal, M.Color, M.Metalness, M.Roughness, M.Hemi);
+    float3 Ambient = AmbientLighting(View, M.Normal, M.Color.xyz, M.Metalness, M.Roughness, M.Hemi);
 	
     O.Color.xyz = Ambient + Light.xyz;
     O.Color.w = M.Color.w;
