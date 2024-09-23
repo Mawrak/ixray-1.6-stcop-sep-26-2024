@@ -129,7 +129,7 @@ float3 deband_color(float3 image, float2 uv)
 {
     float3 dither = Hash23(cos(uv.xy * timers.x) * 1245.0f);
 
-    float3 color = saturate(dot(image, IMAGE_BITRATE));
+    float3 color = saturate(image) * IMAGE_BITRATE;
     float3 pq = frac(color);
 
     color -= pq;
@@ -159,7 +159,7 @@ void build_contangent_frame(float3 position, float3 normal, float2 uv, out float
 
 float4 combine_bloom(float3 low, float4 high)
 {
-    return float4(low + high * high.a, 1.f);
+    return float4(low.xyz + high.xyz * high.w, 1.f);
 }
 
 float calc_fogging(float3 pos)
