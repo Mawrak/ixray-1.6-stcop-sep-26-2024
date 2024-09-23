@@ -10,7 +10,7 @@ public:
 	void			Reset();
 private:
 	CUIMapWnd*		Owner;
-	int32			CurrentState = 0;
+	u32				CurrentState = 0;
 	
 	float			EndMovingTime;
 	float			TargetZoom;
