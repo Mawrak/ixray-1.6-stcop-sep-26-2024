@@ -4,6 +4,7 @@
 #include "../inventory_item.h"
 #include "../Weapon.h"
 #include "../ui/UIInventoryUtilities.h"
+#include "ImUtils.h"
 
 struct
 {
