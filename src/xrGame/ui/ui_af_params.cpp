@@ -96,12 +96,16 @@ void CUIArtefactParams::InitFromXml( CUIXml& xml )
 	m_Prop_line->SetAutoDelete( false );	
 	CUIXmlInit::InitStatic( xml, "prop_line", 0, m_Prop_line );
 
-	m_disp_condition = new UIArtefactParamItem();
-	m_disp_condition->Init(xml, "condition");
-	m_disp_condition->SetAutoDelete(false);
-	LPCSTR name = g_pStringTable->translate("st_condition").c_str();
-	m_disp_condition->SetCaption(name);
-	xml.SetLocalRoot(base_node);
+	const static bool enableArtDegradation = EngineExternal()[EEngineExternalGame::EnableArtefactDegradation];
+	if (enableArtDegradation)
+	{
+		m_disp_condition = new UIArtefactParamItem();
+		m_disp_condition->Init(xml, "condition");
+		m_disp_condition->SetAutoDelete(false);
+		LPCSTR name = g_pStringTable->translate("st_condition").c_str();
+		m_disp_condition->SetCaption(name);
+		xml.SetLocalRoot(base_node);
+	}
 
 	for ( u32 i = 0; i < ALife::infl_max_count; ++i )
 	{
