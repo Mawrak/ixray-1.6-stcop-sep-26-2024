@@ -1,4 +1,6 @@
-﻿#include "FRbmkAgentManagerPlanner.h"
+﻿#include "stdafx.h"
+
+#include "FRbmkAgentManagerPlanner.h"
 
 #include "agent_corpse_manager.h"
 #include "agent_enemy_manager.h"
@@ -76,7 +78,7 @@ bool FRbmkAgentManagerPlanner::IsDangerSelected() const
 	return false;
 }
 
-void FRbmkAgentManagerPlanner::RefreshState(int32 NewState)
+void FRbmkAgentManagerPlanner::RefreshState(u32 NewState)
 {
 	if(CurrentState == NewState)
 	{
