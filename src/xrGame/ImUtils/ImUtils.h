@@ -378,7 +378,7 @@ struct {
 				memcpy_s(result, sizeof(result), pTranslatedName, strlen(pTranslatedName));
 			}
 
-			return result;
+			return xr_strdup(result);
 		}
 
 		return "unknown";
