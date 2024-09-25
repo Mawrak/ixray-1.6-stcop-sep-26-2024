@@ -31,7 +31,7 @@ float DOFFactor(float depth)
 float sampleDepth(float2 center)
 {
     float P = s_position.SampleLevel(smp_nofilter, center, 0).x;
-    return P > 0.9999f ? dof_params.w : depth_unpack.x * rcp(P - depth_unpack.y);
+    return P > 0.9999f ? dof_params.w : (depth_unpack.x * rcp(P - depth_unpack.y));
 }
 
 #define MAXCOF 7.h
