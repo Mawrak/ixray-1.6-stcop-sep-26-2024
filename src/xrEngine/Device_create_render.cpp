@@ -1,7 +1,5 @@
 #include "stdafx.h"
 
-#include <optick.h>
-
 #include "../xrCore/_std_extensions.h"
 #include "imgui_impl_sdl3.h"
 #include "IGame_Persistent.h"
@@ -258,13 +256,13 @@ bool CRenderDevice::InitRenderDevice(APILevel API)
 				ImGui::MenuItem("Shader Debug", nullptr, &States[static_cast<u8>(EditorUI::Shaders)]);
 				if (ImGui::MenuItem("Optick Start Capture"))
 				{
-					OPTICK_START_CAPTURE();
+					PROF_START_CAPTURE();
 				}
 
 				if (ImGui::MenuItem("Optick Stop Capture"))
 				{
-					OPTICK_STOP_CAPTURE();
-					OPTICK_SAVE_CAPTURE("ixr.opt");
+					PROF_STOP_CAPTURE();
+					PROF_SAVE_CAPTURE("ixr.opt");
 				}
 				
 				ImGui::EndMenu();
