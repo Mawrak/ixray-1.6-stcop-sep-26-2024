@@ -476,7 +476,7 @@ struct {
 		{
 			char* pPtr = &category_names[i][0];
 			const char* pStr = convertTypeToString(i);
-			xr_string result = "";
+			char result[32]{};
 
 			if (pStr==nullptr && type_to_class.find(eSelectedType(i)) != type_to_class.end())
 			{
@@ -495,25 +495,20 @@ struct {
 
 				if (g_pClsidManager && g_pClsidManager->is_monster(id))
 				{
-					result += "Monster - ";
-					result += pTranslatedName;
-					//memcpy_s(, sizeof(result), , sizeof("Monster - "));
-					//memcpy_s(&result[0] + sizeof("Monster -"), sizeof(result), pTranslatedName, strlen(pTranslatedName));
+					memcpy_s(result, sizeof(result), "Monster - ", sizeof("Monster - "));
+					memcpy_s(&result[0] + sizeof("Monster -"), sizeof(result), pTranslatedName, strlen(pTranslatedName));
 				}
 				else if (g_pClsidManager && g_pClsidManager->is_weapon(id))
 				{
-					result += "Weapon - ";
-					result += pTranslatedName;
-					//memcpy_s(result, sizeof(result), "Weapon - ", sizeof("Weapon - "));
-					//memcpy_s(&result[0] + sizeof("Weapon -"), sizeof(result), pTranslatedName, strlen(pTranslatedName));
+					memcpy_s(result, sizeof(result), "Weapon - ", sizeof("Weapon - "));
+					memcpy_s(&result[0] + sizeof("Weapon -"), sizeof(result), pTranslatedName, strlen(pTranslatedName));
 				}
 				else
 				{
-					result += pTranslatedName;
-					//memcpy_s(result, sizeof(result), pTranslatedName, strlen(pTranslatedName));
+					memcpy_s(result, sizeof(result), pTranslatedName, strlen(pTranslatedName));
 				}
 
-				pStr = result.c_str();
+				pStr = result;
 			}
 			else {
 				pStr = "unknown";
