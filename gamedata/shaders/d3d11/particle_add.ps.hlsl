@@ -23,12 +23,9 @@ float4 main(v2p I) : SV_Target
 
     //	Igor: additional depth test
 #ifdef USE_SOFT_PARTICLES
-    float2 tcProj = I.tctexgen.xy / I.tctexgen.w;
+    float4 Point = GbufferGetPoint(I.hpos.xy);
 	
-    IXrayGbuffer O;
-    GbufferUnpack(tcProj, I.hpos.xy, O);
-	
-    float spaceDepth = O.PointReal.z - I.tctexgen.z;
+    float spaceDepth = Point.z - I.tctexgen.z;
     result *= Contrast(saturate(spaceDepth * 1.3f), 2.0f);
 #endif //	USE_SOFT_PARTICLES
 

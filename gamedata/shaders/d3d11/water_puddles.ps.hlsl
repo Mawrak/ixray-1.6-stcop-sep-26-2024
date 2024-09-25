@@ -77,9 +77,8 @@ float4 main(PSInput I) : SV_Target
 	
 	// Igor: additional depth test
 #ifdef USE_SOFT_WATER
-	gbuffer_data gbd = gbuffer_load_data(I.hpos.xy * pos_decompression_params2.zw, I.hpos.xy);
-
-	float waterDepth = length(mul(m_V, float4(I.world_position, 1.0)).xyz - gbd.P) * 0.75f;
+    float4 Point = GbufferGetPoint(I.hpos.xy);
+	float waterDepth = length(mul(m_V, float4(I.world_position, 1.0)).xyz - Point.xyz) * 0.75f;
 
 	//	water fog
 	float3 Fc = 0.1f * water_intensity.xxx;

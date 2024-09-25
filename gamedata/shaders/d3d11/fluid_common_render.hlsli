@@ -263,7 +263,7 @@ void DoSample(float weight, float3 O, inout float4 color)
         float lookUpVal = ((s - threshold) / (maxValue - threshold));
         lookUpVal = 1.0 - pow(lookUpVal, RednessFactor);
         lookUpVal = clamp(lookUpVal, 0, 1);
-        float3 interpColor = fireTransferFunction.SampleLevel(samLinearClamp, float2(lookUpVal, 0), 0);
+        float3 interpColor = fireTransferFunction.SampleLevel(samLinearClamp, float2(lookUpVal, 0), 0).xyz;
         float mult = (s - threshold);
         color += float4(weight * interpColor.rgb, weight * mult * mult * fireAlphaMultiplier);
     }

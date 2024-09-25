@@ -93,6 +93,15 @@ void GbufferPack(inout IXrayGbufferPack O, inout IXrayMaterial M)
     // O.Material.y = M.Roughness;
 }
 
+float4 GbufferGetPoint(in float2 HPos)
+{
+	float Depth = s_position.Load(int3(HPos, 0)).x;
+	HPos = HPos - m_taa_jitter.xy * float2(0.5f, -0.5f) * pos_decompression_params2.xy;
+	float3 Point = float3(HPos * pos_decompression_params.zw - pos_decompression_params.xy, 1.0f);
+    Point *= depth_unpack.x * rcp(Depth - depth_unpack.y);
+    return float4(Point, 1.0f);
+}
+
 void GbufferUnpack(in float2 TexCoord, in float2 HPos, inout IXrayGbuffer O)
 {
     float4 NormalHemi = s_normal.Load(int3(HPos, 0));

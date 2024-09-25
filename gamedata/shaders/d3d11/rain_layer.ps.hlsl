@@ -9,10 +9,7 @@ Texture2D s_water;
 
 float4 main(float2 tc : TEXCOORD0, float2 tcJ : TEXCOORD1, float4 pos2d : SV_POSITION) : SV_Target
 {
-    IXrayGbuffer O;
-    GbufferUnpack(tc, pos2d.xy, O);
-
-    float4 P = float4(O.PointReal, 1.0f);
+    float4 P = GbufferGetPoint(pos2d.xy);
     float4 PS = mul(m_shadow, P);
 
     float s = shadow(PS);

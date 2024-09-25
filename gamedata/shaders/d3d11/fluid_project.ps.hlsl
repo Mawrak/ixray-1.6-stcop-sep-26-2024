@@ -5,7 +5,7 @@ float3 main(p_fluidsim input) : SV_Target
 {
     if (IsBoundaryCell(input.texcoords.xyz))
     {
-        return GetObstVelocity(input.texcoords.xyz);
+        return GetObstVelocity(input.texcoords.xyz).xyz;
     }
 
     float pCenter = Texture_pressure.SampleLevel(samPointClamp, input.texcoords, 0).x;
