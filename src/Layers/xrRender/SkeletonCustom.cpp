@@ -701,6 +701,7 @@ void CKinematics::CalculateWallmarks()
 
 void CKinematics::RenderWallmark(intrusive_ptr<CSkeletonWallmark> wm, FVF::LIT* &V)
 {
+	PROF_EVENT("CKinematics::RenderWallmark");
 	VERIFY(wm);
 	VERIFY(V);
 	VERIFY2(bones,"Invalid visual. Bones already released.");
@@ -802,6 +803,7 @@ int CKinematics::LL_GetBoneGroups(xr_vector<xr_vector<u16> >& groups)
 
 void CKinematics::StoreVisualMatrix(Fmatrix& world_matrix)
 {
+	PROF_EVENT("StoreVisualMatrix")
 	if (dwFirstRenderFrame != RDEVICE.dwFrame) {
 		dwFirstRenderFrame = RDEVICE.dwFrame;
 		mOldWorldMartrix.set(mOldWorldMartrixTmp);

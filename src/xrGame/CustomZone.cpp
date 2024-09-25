@@ -506,6 +506,8 @@ void CCustomZone::UpdateCL		()
 // called as usual
 void CCustomZone::shedule_Update(u32 dt)
 {
+	PROF_EVENT("CCustomZone::shedule_Update");
+	inherited::shedule_Update(dt);
 	m_zone_flags.set(eZoneIsActive, FALSE);
 
 	if (IsEnabled())

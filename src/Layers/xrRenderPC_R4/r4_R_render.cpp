@@ -571,12 +571,12 @@ void CRender::Render		()
 		HWOCC.occq_refresh();
 	else
 	{
+		PIX_EVENT(DEFER_TEST_LIGHT_VIS);
 		//******* Occlusion testing of volume-limited light-sources
 		Target->phase_occq							();
 		LP_normal.clear								();
 		LP_pending.clear							();
 		{
-			PIX_EVENT(DEFER_TEST_LIGHT_VIS);
 			// perform tests
 			size_t	count = 0;
 			light_Package&	LP	= Lights.package;
@@ -643,12 +643,15 @@ void CRender::Render		()
 		Target->phase_scene_end					();
 	}
 
-	RCache.set_ZB(NULL);
-	ID3D11Resource* res;
-	RDepth->GetResource(&res);
-
-	RContext->CopyResource(Target->rt_Position->pSurface, res);
-	_RELEASE(res);
+	{
+		PIX_EVENT(ZBUFFER_COPY);
+		RCache.set_ZB(NULL);
+		ID3D11Resource* res;
+		RDepth->GetResource(&res);
+	
+		RContext->CopyResource(Target->rt_Position->pSurface, res);
+		_RELEASE(res);
+	}
 
 	// Wall marks
 	if(Wallmarks)	
@@ -657,22 +660,6 @@ void CRender::Render		()
 		Target->phase_wallmarks					();
 		g_r										= 0;
 		Wallmarks->Render						();				// wallmarks has priority as normal geometry
-	}
-
-	// Update incremental shadowmap-visibility solver
-	{
-		PIX_EVENT(DEFER_FLUSH_OCCLUSION);
-		u32 it=0;
-		for (it=0; it<Lights_LastFrame.size(); it++)	{
-			if (0==Lights_LastFrame[it])	continue	;
-			try {
-				Lights_LastFrame[it]->svis.flushoccq()	;
-			} catch (...)
-			{
-				Msg	("! Failed to flush-OCCq on light [%d] %X",it,*(u32*)(&Lights_LastFrame[it]));
-			}
-		}
-		Lights_LastFrame.clear	();
 	}
 
 	//	TODO: DX10: Implement DX10 rain.

@@ -519,6 +519,7 @@ void CInput::OnAppDeactivate	(void)
 
 void CInput::OnFrame()
 {
+	PROF_EVENT("CInput::OnFrame");
 	CScopeTimer Input(RDEVICE.Statistic->Input);
 
 	dwCurTime = RDEVICE.TimerAsync_MMT();

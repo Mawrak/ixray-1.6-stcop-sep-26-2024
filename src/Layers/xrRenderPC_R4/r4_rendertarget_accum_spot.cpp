@@ -7,7 +7,7 @@ void CRenderTarget::accum_spot(light* L) {
 	{
 		return;
 	}
-
+	PROF_EVENT("CRenderTarget::accum_spot")
 	phase_accumulator();
 	RImplementation.stats.l_visible++;
 
@@ -173,9 +173,9 @@ void CRenderTarget::accum_volumetric(light* L) {
 	{
 		return;
 	}
-	//if (L->flags.type != IRender_Light::SPOT) return;
-	if(!L->flags.bVolumetric) return;
 
+	if(!L->flags.bVolumetric) return;
+	PROF_EVENT("CRenderTarget::accum_volumetric")
 	phase_vol_accumulator();
 
 	ref_shader			shader;
@@ -187,16 +187,9 @@ void CRenderTarget::accum_volumetric(light* L) {
 
 	// *** assume accumulator setted up ***
 	// *****************************	Mask by stencil		*************************************
-	BOOL	bIntersect = FALSE; //enable_scissor(L);
-	{
-		// setup xform
-		RCache.set_xform_world(L->m_xform);
-		RCache.set_xform_view(Device.mView);
-		RCache.set_xform_project(Device.mProject);
-		bIntersect = enable_scissor(L);
-
-		//enable_dbt_bounds				(L);
-	}
+	RCache.set_xform_world(L->m_xform);
+	RCache.set_xform_view(Device.mView);
+	RCache.set_xform_project(Device.mProject);
 
 	RCache.set_ColorWriteEnable();
 	RCache.set_CullMode(CULL_NONE);		// back
