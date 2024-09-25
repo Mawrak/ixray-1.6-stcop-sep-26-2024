@@ -1,13 +1,12 @@
 #ifndef DOF_H_INCLUDED
 #define DOF_H_INCLUDED
 
-// #define USE_DOF
+uniform float4 screen_res;
 
 #ifndef USE_DOF
 
 float3 dof(float2 center)
 {
-    //	float3 	img 	= tex2D		(s_image, center);
     float3 img = s_image.Sample(smp_rtlinear, center).xyz;
     return img;
 }
@@ -42,7 +41,7 @@ float3 dof(float2 center)
     // Scale tap offsets based on render target size
     float depth = sampleDepth(center);
     float blur = DOFFactor(depth);
-    float2 scale = pos_decompression_params2.zw * dof_kernel.z * blur;
+    float2 scale = 0.5f * screen_res.zw * dof_kernel.z * blur;
 
     // poisson
     float2 o[12];
