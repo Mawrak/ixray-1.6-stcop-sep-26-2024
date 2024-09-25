@@ -345,43 +345,7 @@ struct {
 		}
 		}
 
-
-		if (type_to_class.find(eSelectedType(type)) != type_to_class.end())
-		{
-			char name[16]{};
-			CLASS_ID id = type_to_class.at(eSelectedType(type));
-			CLSID2TEXT(id, name);
-
-			for (int i = 0; i < 16; ++i)
-			{
-				if (name[i] == 32)
-				{
-					name[i] = '\0';
-				}
-			}
-			const char* pTranslatedName = g_pStringTable ? g_pStringTable->translate(name).c_str() : name;
-			char result[32]{};
-
-
-			if (g_pClsidManager && g_pClsidManager->is_monster(id))
-			{
-				memcpy_s(result, sizeof(result), "Monster - ", sizeof("Monster - "));
-				memcpy_s(&result[0] + sizeof("Monster -"), sizeof(result), pTranslatedName, strlen(pTranslatedName));
-			}
-			else if (g_pClsidManager && g_pClsidManager->is_weapon(id))
-			{
-				memcpy_s(result, sizeof(result), "Weapon - ", sizeof("Weapon - "));
-				memcpy_s(&result[0] + sizeof("Weapon -"), sizeof(result), pTranslatedName, strlen(pTranslatedName));
-			}
-			else
-			{
-				memcpy_s(result, sizeof(result), pTranslatedName, strlen(pTranslatedName));
-			}
-
-			return xr_strdup(result);
-		}
-
-		return "unknown";
+		return nullptr;
 	}
 
 	bool filter(CLASS_ID id) {
@@ -512,6 +476,40 @@ struct {
 		{
 			char* pPtr = &category_names[i][0];
 			const char* pStr = convertTypeToString(i);
+			char result[32]{};
+
+			if (pStr==nullptr && type_to_class.find(eSelectedType(i)) != type_to_class.end())
+			{
+				char name[16]{};
+				CLASS_ID id = type_to_class.at(eSelectedType(i));
+				CLSID2TEXT(id, name);
+
+				for (int i = 0; i < 16; ++i)
+				{
+					if (name[i] == 32)
+					{
+						name[i] = '\0';
+					}
+				}
+				const char* pTranslatedName = g_pStringTable ? g_pStringTable->translate(name).c_str() : name;
+
+				if (g_pClsidManager && g_pClsidManager->is_monster(id))
+				{
+					memcpy_s(result, sizeof(result), "Monster - ", sizeof("Monster - "));
+					memcpy_s(&result[0] + sizeof("Monster -"), sizeof(result), pTranslatedName, strlen(pTranslatedName));
+				}
+				else if (g_pClsidManager && g_pClsidManager->is_weapon(id))
+				{
+					memcpy_s(result, sizeof(result), "Weapon - ", sizeof("Weapon - "));
+					memcpy_s(&result[0] + sizeof("Weapon -"), sizeof(result), pTranslatedName, strlen(pTranslatedName));
+				}
+				else
+				{
+					memcpy_s(result, sizeof(result), pTranslatedName, strlen(pTranslatedName));
+				}
+
+				pStr = result;
+			}
 
 			memcpy_s(pPtr, sizeof(category_names[i]), pStr, strlen(pStr));
 
