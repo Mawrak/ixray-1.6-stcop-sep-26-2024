@@ -1,4 +1,7 @@
 #include "stdafx.h"
+
+#include <optick.h>
+
 #include "../xrCore/_std_extensions.h"
 #include "imgui_impl_sdl3.h"
 #include "IGame_Persistent.h"
