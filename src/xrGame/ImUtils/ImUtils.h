@@ -496,12 +496,12 @@ struct {
 				if (g_pClsidManager && g_pClsidManager->is_monster(id))
 				{
 					memcpy_s(result, sizeof(result), "Monster - ", sizeof("Monster - "));
-					memcpy_s(&result[0] + sizeof("Monster -"), sizeof(result), pTranslatedName, strlen(pTranslatedName));
+					memcpy_s(&result[0] + sizeof("Monster -"), sizeof(result) - sizeof("Monster -"), pTranslatedName, strlen(pTranslatedName));
 				}
 				else if (g_pClsidManager && g_pClsidManager->is_weapon(id))
 				{
 					memcpy_s(result, sizeof(result), "Weapon - ", sizeof("Weapon - "));
-					memcpy_s(&result[0] + sizeof("Weapon -"), sizeof(result), pTranslatedName, strlen(pTranslatedName));
+					memcpy_s(&result[0] + sizeof("Weapon -"), sizeof(result) - sizeof("Weapon -"), pTranslatedName, strlen(pTranslatedName));
 				}
 				else
 				{
