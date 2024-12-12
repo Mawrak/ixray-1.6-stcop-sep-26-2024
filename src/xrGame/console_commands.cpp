@@ -2168,7 +2168,7 @@ void CCC_RegisterCommands()
 	// options
 	g_OptConCom.Init();
 
-#ifndef MASTER_GOLD
+//#ifndef MASTER_GOLD
 	CMD1(CCC_SetWeather, "set_weather");
 	CMD1(CCC_ReceiveInfo, "g_info");
 	CMD1(CCC_DisableInfo, "d_info");
@@ -2180,7 +2180,7 @@ void CCC_RegisterCommands()
 	CMD1(CCC_SetMonstComm, "g_monster_community");
 
 	CMD1(CCC_Particle_TEST,     "g_ps_test");
-#endif
+//#endif
 
 	CMD1(CCC_MemStats,			"stat_memory"			);
 	// game
@@ -2235,11 +2235,11 @@ void CCC_RegisterCommands()
 //#endif // DEBUG
 	
 	// Demo
-#if 1//ndef MASTER_GOLD
+//#if 1//ndef MASTER_GOLD
 	CMD1(CCC_DemoPlay,			"demo_play"				);
 	CMD1(CCC_DemoRecord,		"demo_record"			);
 	CMD1(CCC_DemoRecordSetPos,	"demo_set_cam_position"	);
-#endif // #ifndef MASTER_GOLD
+//#endif // #ifndef MASTER_GOLD
 	
 #ifndef MASTER_GOLD
 	// ai
@@ -2352,14 +2352,14 @@ CMD4(CCC_Integer,			"hit_anims_tune",						&tune_hit_anims,		0, 1);
 	CMD3(CCC_Mask,				"g_no_clip",					&psActorFlags,	AF_NO_CLIP	);
 #endif // DEBUG
 
-#ifndef MASTER_GOLD
+//#ifndef MASTER_GOLD
 	CMD1(CCC_JumpToLevel,	"jump_to_level"		);
 	CMD3(CCC_Mask,			"g_god",			&psActorFlags,	AF_GODMODE	);
 	CMD3(CCC_Mask,			"g_unlimitedammo",	&psActorFlags,	AF_UNLIMITEDAMMO);
 	CMD1(CCC_Script,		"run_script");
 	CMD1(CCC_ScriptCommand,	"run_string");
 	CMD1(CCC_TimeFactor,	"time_factor");		
-#endif // MASTER_GOLD
+//#endif // MASTER_GOLD
 
 	CMD1(CCC_ReloadSystemLtx, "reload_system_ltx");
 	CMD3(CCC_Mask,		"g_autopickup",			&psActorFlags,	AF_AUTOPICKUP);

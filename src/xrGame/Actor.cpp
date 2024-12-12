@@ -1020,7 +1020,7 @@ void CActor::UpdateCL	()
 	{
 		m_holder->UpdateEx(currentFOV());
 	}
-	else
+	else if (g_Alive())
 	{
 		UpdatePlayerView();
 	}
@@ -1030,7 +1030,7 @@ void CActor::UpdateCL	()
 	m_pPhysics_support->in_UpdateCL	();
 
 
-	if (g_Alive()) 
+	if (g_Alive())
 		PickupModeUpdate	();	
 
 	PickupModeUpdate_COD();
@@ -1372,6 +1372,11 @@ void CActor::shedule_Update	(u32 DT)
 		if(!g_Alive()&&m_DangerSnd._feedback())
 			m_DangerSnd.stop();
 	}
+    
+    if (!g_Alive())
+	{
+		UpdatePlayerView();
+	}
 	
 	//что актер видит перед собой
 	collide::rq_result& RQ				= HUD().GetCurrentRayQuery();
@@ -1486,7 +1491,7 @@ void CActor::shedule_Update	(u32 DT)
 	UpdateArtefactsOnBeltAndOutfit				();
 	m_pPhysics_support->in_shedule_Update		(DT);
 	Check_for_AutoPickUp						();
-};
+}
 #include "debug_renderer.h"
 void CActor::renderable_Render	()
 {
