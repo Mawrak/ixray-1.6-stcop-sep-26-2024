@@ -38,8 +38,8 @@ public:
 	}
 
 	// kernel
-	virtual void	seek	(u32 pos)						= 0;
-	virtual u32		tell	()								= 0;
+	virtual void	seek	(u32 pos)				= 0;
+	virtual u32		tell	()						= 0;
 
 	virtual void	w		(const void* ptr, u32 count)	= 0;
 
@@ -132,39 +132,19 @@ public:
 //------------------------------------------------------------------------------------
 // Read
 //------------------------------------------------------------------------------------
-
-// Uncomment following line to try other implementations in FS_impl.h
-//#define TESTING_IREADER
-
-#ifdef TESTING_IREADER
-struct IReaderBase_Test;
-
-struct XRCORE_API IReaderTestPolicy
-{
-	IReaderBase_Test*	m_test;
-	IReaderTestPolicy() { m_test = NULL; }
-	~IReaderTestPolicy(); // defined in FS.cpp
-};
-#endif // TESTING_IREADER
-
-template <typename implementation_type>
 class IReaderBase
-
-#ifdef TESTING_IREADER
-	: public IReaderTestPolicy // inheriting
-#endif //TESTING_IREADER
-
 {
 public:
 	IC				IReaderBase	() : m_last_pos (0) {}
 	virtual			~IReaderBase()			{}
+	virtual u32			elapsed()	const = 0;
+	IC BOOL			eof			()	const		{return elapsed() <= 0;	};
 
-	IC implementation_type&impl	()				{return *(implementation_type*)this;}
-	IC const implementation_type&impl() const	{return *(implementation_type*)this;}
+	virtual u32		tell() const = 0;
+	virtual u32		length() const = 0;
+	virtual void	advance(int cnt) = 0;
 
-	IC BOOL			eof			()	const		{return impl().elapsed()<=0;	};
-	
-	IC void			r			(void *p,int cnt) {impl().r(p,cnt);}
+	virtual void	r			(void* p, u32 cnt) = 0;
 
 	IC Fvector		r_vec3		()			{Fvector tmp;r(&tmp,3*sizeof(float));return tmp;	};
 	IC Fvector4		r_vec4		()			{Fvector4 tmp;r(&tmp,4*sizeof(float));return tmp;	};
@@ -209,14 +189,16 @@ public:
 		pvDecompress(A,t);
 		A.mul		(s);
 	}
-	// Set file pointer to start of chunk data (0 for root chunk)
-	IC	void		rewind		()			{	impl().seek(0); }
 
-	u32 			find_chunk  (u32 ID, BOOL* bCompressed);
+	virtual void	seek(int ptr) = 0;
+	// Set file pointer to start of chunk data (0 for root chunk)
+	IC	void		rewind		()			{	seek(0); }
+
+	virtual u32 find_chunk  (u32 ID, BOOL* bCompressed = 0);
 	
 	IC	BOOL		r_chunk		(u32 ID, void *dest)	// чтение XR Chunk'ов (4b-ID,4b-size,??b-data)
 	{
-		u32	dwSize = ((implementation_type*)this)->find_chunk(ID);
+		u32	dwSize = this->find_chunk(ID);
 		if (dwSize!=0) {
 			r(dest,dwSize);
 			return TRUE;
@@ -225,7 +207,7 @@ public:
 	
 	IC	BOOL		r_chunk_safe(u32 ID, void *dest, u32 dest_size)	// чтение XR Chunk'ов (4b-ID,4b-size,??b-data)
 	{
-		u32	dwSize = ((implementation_type*)this)->find_chunk(ID);
+		u32	dwSize = this->find_chunk(ID);
 		if (dwSize!=0) {
 			R_ASSERT(dwSize==dest_size);
 			r(dest,dwSize);
@@ -237,7 +219,9 @@ private:
 	u32					m_last_pos;
 };
 
-class XRCORE_API IReader : public IReaderBase<IReader> {
+class XRCORE_API IReader : 
+	public IReaderBase
+{
 protected:
 	char *			data	;
 	int				Pos		;
@@ -271,15 +255,15 @@ protected:
 	u32 			advance_term_string			();
 
 public:
-	IC int			elapsed		()	const		{	return Size-Pos;		};
-	IC int			tell		()	const		{	return Pos;				};
-	IC void			seek		(int ptr)		{	Pos=ptr; VERIFY((Pos<=Size) && (Pos>=0));};
-	IC int			length		()	const		{	return Size;			};
+	IC u32			elapsed		()	const override {	return Size-Pos;		};
+	   void			seek		(int ptr) override {	Pos=ptr; VERIFY((Pos<=Size) && (Pos>=0));};
+		u32			tell		()	const override {	return (u32)Pos;				};
+		u32			length		()	const override {	return (u32)Size;			};
+		void		advance		(int cnt) override {	Pos+=cnt;VERIFY((Pos<=Size) && (Pos>=0));};
 	IC void*		pointer		()	const		{	return &(data[Pos]);	};
-	IC void			advance		(int cnt)		{	Pos+=cnt;VERIFY((Pos<=Size) && (Pos>=0));};
 
 public:
-	void			r			(void *p,int cnt);
+	void			r			(void *p,u32 cnt) override;
 
 	void			r_string	(char *dest, u32 tgt_sz);
 	void			r_string	(xr_string& dest);
@@ -300,10 +284,10 @@ public:
 	// iterators
 	IReader*		open_chunk_iterator		(u32& ID, IReader* previous=NULL);	// NULL=first
 
-	u32 			find_chunk	(u32 ID, BOOL* bCompressed = 0);
+	u32 			find_chunk	(u32 ID, BOOL* bCompressed = 0) override;
 
 private:
-	typedef IReaderBase<IReader>	inherited;
+	typedef IReaderBase inherited;
 };
 
 class XRCORE_API CVirtualFileRW : public IReader

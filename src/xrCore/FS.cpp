@@ -254,7 +254,7 @@ IReader*	IReader::open_chunk(u32 ID)
 	u32	dwSize = find_chunk(ID,&bCompressed);
 	if (dwSize!=0) {
 		if (bCompressed) {
-			u8*		dest;
+			u8*		dest = nullptr;
 			unsigned	dest_sz;
 			_decompressLZ(&dest,&dest_sz,pointer(),dwSize);
 			return new CTempReader	(dest,		dest_sz,		tell()+dwSize);
@@ -271,13 +271,6 @@ void	IReader::close()
 }
 
 #include "FS_impl.h"
-
-#ifdef TESTING_IREADER
-IReaderTestPolicy::~IReaderTestPolicy()
-{
-	xr_delete(m_test);
-};
-#endif // TESTING_IREADER
 
 #ifdef FIND_CHUNK_BENCHMARK_ENABLE
 find_chunk_counter g_find_chunk_counter;
@@ -308,7 +301,7 @@ IReader*	IReader::open_chunk_iterator	(u32& ID, IReader* _prev)
 	if ( ID & CFS_CompressMark )
 	{
 		// compressed
-		u8*				dest	;
+		u8*				dest = nullptr;
 		unsigned		dest_sz	;
 		_decompressLZ	(&dest,&dest_sz,pointer(),_size);
 		return new CTempReader	(dest,		dest_sz,	tell()+_size);
@@ -318,7 +311,7 @@ IReader*	IReader::open_chunk_iterator	(u32& ID, IReader* _prev)
 	}
 }
 
-void	IReader::r	(void *p,int cnt)
+void	IReader::r	(void *p,u32 cnt)
 {
 	VERIFY			(Pos+cnt<=Size);
 	CopyMemory		(p,pointer(),cnt);

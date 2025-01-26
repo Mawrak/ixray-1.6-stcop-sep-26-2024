@@ -53,7 +53,7 @@ void CStreamReader::map						(const u32 &new_offset)
 	m_start_pointer				= m_current_pointer;
 }
 
-void CStreamReader::advance					(const int &offset)
+void CStreamReader::advance					(int offset)
 {
 	VERIFY						(m_current_pointer >= m_start_pointer);
 	VERIFY						(u32(m_current_pointer - m_start_pointer) <= m_current_window_size);
