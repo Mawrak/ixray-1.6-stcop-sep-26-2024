@@ -56,6 +56,9 @@ public:
 	const xr_string WallmarkLeft() const;
 	const xr_string WallmarkRight() const;
 	float GetWeaponIconScaling() const;
+	const char* PlatformMode() const;
+	bool ClearSkyMode() const;
+	bool CallOfPripyatMode() const;
 
 	bool operator[](const EEngineExternalUI& ID) const;
 	bool operator[](const EEngineExternalPhysical& ID) const;
