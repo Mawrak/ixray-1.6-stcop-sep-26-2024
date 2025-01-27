@@ -104,18 +104,27 @@ BOOL	R_constant_table::parse	(void* _desc, u32 destination)
 				case 4:
 					switch (T->Rows)
 					{
+					case 2:
+						r_type = RC_2x4;
+						break;
 					case 3:
+						r_type = RC_3x4;
+						break;
+						/*
 						switch (it->RegisterCount)
 						{
 						case 2:	r_type	=	RC_2x4;	break;
 						case 3: r_type	=	RC_3x4;	break;
-						default:
-							Msg("Invalid matrix dimension:%dx%d in constant %s", it->RegisterCount, T->Columns, name);
-							fatal		("MATRIX_ROWS: unsupported number of RegisterCount");
-							break;
+						default:	
+						fatal		("MATRIX_ROWS: unsupported number of RegisterCount");
+						break;
 						}
 						break;
-					case 4:			r_type		=	RC_4x4;		VERIFY(4 == it->RegisterCount); break;
+						*/
+					case 4: 
+						r_type = RC_4x4;
+						//VERIFY(4 == it->RegisterCount); 
+						break;
 					default:
 						fatal		("MATRIX_ROWS: unsupported number of Rows");
 						break;
