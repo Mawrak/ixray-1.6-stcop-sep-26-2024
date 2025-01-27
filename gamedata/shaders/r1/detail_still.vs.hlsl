@@ -40,11 +40,14 @@ vf main(v_detail v)
 	float3 posi = float3(mm[1].xyz);
 	
 	float scale = mm[0].w;
-	float hemi = mm[1].w;
+	
+	float hemi = abs(mm[1].w);
+	float sun = sign(mm[1].w)*0.25f+0.25f;
+	
     float4 m0 = float4(mmhpb[0]*scale, posi.x);
     float4 m1 = float4(mmhpb[1]*scale, posi.y);
     float4 m2 = float4(mmhpb[2]*scale, posi.z);
-	float4 c0 = float4(L_ambient.rgb+L_hemi_color.rgb*hemi+L_sun_color.rgb*0.3f*hemi, 1.0f);
+	float4 c0 = float4(L_ambient.rgb+L_hemi_color.rgb*hemi+L_sun_color.rgb*sun, 1.0f);
 
     // Transform to world coords
     float4 pos;

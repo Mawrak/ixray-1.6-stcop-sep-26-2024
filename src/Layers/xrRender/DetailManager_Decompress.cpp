@@ -297,7 +297,8 @@ RDEVICE.Statistic->TEST0.End		();
 #endif
 #endif
 
-			Item.c_hemi = DS.r_qclr(DS.c_hemi,	15);
+			Item.c_hemi = DS.r_qclr(DS.c_hemi, 15)+EPS;
+			Item.c_hemi = DS.r_qclr(DS.c_dir, 15)>0.07f ? Item.c_hemi : -Item.c_hemi;
 
 			// Vis-sorting
 #ifndef		DBG_SWITCHOFF_RANDOMIZE

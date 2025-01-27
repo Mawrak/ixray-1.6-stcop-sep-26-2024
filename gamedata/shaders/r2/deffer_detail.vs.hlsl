@@ -33,6 +33,9 @@ void main(in v_detail I, out p_bumped_new O)
 	
 	float scale = mm[0].w;
 
+	float hemi = abs(mm[1].w);
+	float sun = sign(mm[1].w)*0.25f+0.25f;
+
     float4 m0 = float4(mmhpb[0]*scale, posi.x);
     float4 m1 = float4(mmhpb[1]*scale, posi.y);
     float4 m2 = float4(mmhpb[2]*scale, posi.z);
@@ -62,7 +65,7 @@ void main(in v_detail I, out p_bumped_new O)
     N.y = pos.y - m1.w + 0.75f;
     N.z = pos.z - m2.w;
 
-    O.tcdh = float4(tc.xy, mm[1].w, 1.0f);
+    O.tcdh = float4(tc.xy, hemi, sun);
     O.position = float4(Pe, 1.0f);
 
     float3x3 xform = mul((float3x3)m_WV, float3x3(
