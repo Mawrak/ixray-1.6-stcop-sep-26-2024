@@ -224,7 +224,7 @@ void CRender::create()
 
 	ZeroMemory(q_sync_point, sizeof(q_sync_point));
 
-	for(u32 i = 0; i < 2; ++i) {
+	for(u32 i = 0; i < Caps.iGPUNum; ++i) {
 		R_CHK(RDevice->CreateQuery(&qdesc, &q_sync_point[i]));
 	}
 
@@ -242,7 +242,7 @@ void CRender::destroy() {
 	FluidManager.Destroy();
 	::PortalTraverser.destroy();
 
-	for(u32 i = 0; i < 2; ++i) {
+	for(u32 i = 0; i < Caps.iGPUNum; ++i) {
 		_RELEASE(q_sync_point[i]);
 	}
 
@@ -279,7 +279,7 @@ void CRender::reset_begin() {
 	xr_delete(Target);
 	HWOCC.occq_destroy();
 
-	for(u32 i = 0; i < 2; ++i) {
+	for(u32 i = 0; i < Caps.iGPUNum; ++i) {
 		_RELEASE(q_sync_point[i]);
 	}
 }
@@ -289,7 +289,7 @@ void CRender::reset_end() {
 	qdesc.MiscFlags = 0;
 	qdesc.Query = D3D_QUERY_EVENT;
 
-	for(u32 i = 0; i < 2; ++i) {
+	for(u32 i = 0; i < Caps.iGPUNum; ++i) {
 		R_CHK(RDevice->CreateQuery(&qdesc, &q_sync_point[i]));
 	}
 	//	Prevent error on first get data

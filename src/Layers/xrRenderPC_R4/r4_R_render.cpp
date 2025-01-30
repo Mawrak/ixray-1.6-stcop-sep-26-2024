@@ -513,7 +513,7 @@ void CRender::Render		()
 			}
 		}
 		Device.Statistic->RenderDUMP_Wait_S.End();
-		q_sync_count = (q_sync_count + 1) % 2;
+		q_sync_count = (q_sync_count + 1) % Caps.iGPUNum;
 		//CHK_DX										(q_sync_point[q_sync_count]->Issue(D3DISSUE_END));
 		CHK_DX(EndQuery(q_sync_point[q_sync_count]));
 	}
