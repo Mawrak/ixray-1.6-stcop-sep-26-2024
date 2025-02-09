@@ -253,8 +253,8 @@ void CEntity::KillEntity(u16 whoID)
 		if (isGodMode())
 		{
 			luabind::functor<void> functor;
-			ai().script_engine().functor("surge_manager.surge_callback2", functor);
-			functor();
+			if(ai().script_engine().functor("surge_manager.surge_callback2", functor))
+				functor();
 
 			return;
 		}
