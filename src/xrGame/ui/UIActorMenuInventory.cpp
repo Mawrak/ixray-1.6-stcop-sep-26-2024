@@ -844,7 +844,7 @@ bool CUIActorMenu::TryUseItem( CUICellItem* cell_itm )
 
 	SendEvent_Item_Eat		( item, recipient );
 	PlaySnd					( eItemUse );
-	SetCurrentItem			( nullptr );
+//	SetCurrentItem			( nullptr );
 	return true;
 }
 
